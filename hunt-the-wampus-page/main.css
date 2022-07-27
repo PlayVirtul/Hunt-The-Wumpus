@@ -8,6 +8,12 @@ body {
     background-color: rgb(14, 95, 75);
 }
 
+.map {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .room {
     width: 50px;
     height: 50px;
@@ -21,14 +27,20 @@ body {
     text-align: center;
 }
 
-.controls {
+#controls {
     color: bisque;
 }
 
 .stats {
     color: bisque;
+    border: 5px solid black;
+    text-align: center;
 }
 
-.raw {
+.row {
     display: flex;
+}
+
+.player {
+    background-color: rgb(8, 180, 22);
 }
