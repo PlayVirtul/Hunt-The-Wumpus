@@ -11,6 +11,7 @@ export default class Player extends GameObject {
         if (!y || y < 0) {
             throw new Error('player\'s y cannot be less than zero')
         }
+
         super(x, y);
     }
 

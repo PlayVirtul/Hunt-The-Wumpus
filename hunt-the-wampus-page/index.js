@@ -1,8 +1,9 @@
 import Direction from "./direction.js";
 import GameMap from "./game-objects/game-map.js";
 import Player from "./game-objects/player.js";
+import Pit from "./game-objects/pit.js";
 
-class Game {
+class Application {
     run() {
         const size = 5;
         this.player = new Player(3, 2);
@@ -130,5 +131,5 @@ class Game {
 
 }
 
-const app = new Game();
+const app = new Application();
 app.run();

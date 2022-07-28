@@ -1,5 +1,4 @@
 import GameObject from "./game-object.js";
-import Player from "./player.js";
 import Room from "./room.js";
 
 export default class GameMap {
@@ -16,6 +15,7 @@ export default class GameMap {
 
         this.rooms = [];
         this.size = size;
+
         for (let y = 0; y < size; y++) {
             this.rooms[y] = [];
             for (let x = 0; x < size; x++) {
@@ -23,7 +23,10 @@ export default class GameMap {
             }
         }
 
-        this.rooms[player.y][player.x] = new Room(player);
+        for (const gameObject of gameObjects) {
+            const room = this.rooms[gameObject.y][gameObject.x];
+            room.add(gameObject);
+        }
     }
 
     render() {
