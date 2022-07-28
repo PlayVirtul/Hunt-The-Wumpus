@@ -1,10 +1,17 @@
+import GameObject from "./game-object.js";
 import Player from "./player.js";
 import Room from "./room.js";
 
 export default class GameMap {
-    constructor(player, size) {
-        if (!player || player instanceof Player == false) {
+    constructor(gameObjects, size) {
+        if (!gameObjects && gameObjects.length == 0) {
             throw new Error('argument player connot be null or undefiend')
+        }
+
+        for (const gameObject of gameObjects) {
+            if (gameObject instanceof GameObject == false) {
+                throw new Error('argument player cannot be null undefiend');
+            }
         }
 
         this.rooms = [];
