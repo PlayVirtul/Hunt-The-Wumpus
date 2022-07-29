@@ -8,12 +8,13 @@ class Game {
     run() {
         const size = 5;
         this.player = new Player(3, 2);
+        this.wumpus = new Wumpus(1, 1);
         const gameObjects = [];
 
         gameObjects.push(this.player);
+        gameObjects.push(this.wumpus);
         gameObjects.push(new Pit(0, 3));
         gameObjects.push(new Pit(4, 1));
-        gameObjects.push(new Wumpus(1, 1));
 
         this.map = new GameMap(gameObjects, size);
         this.#draw();
@@ -76,8 +77,13 @@ class Game {
 
     #update() {
         const room = this.map.rooms[this.player.y][this.player.x];
-        const pit = room.getObject(x => x instanceof Pit);
 
+        const wumpus = room.getObject(x => x instanceof Wumpus)
+        if (wumpus) {
+            this.player.die();
+        }
+
+        const pit = room.getObject(x => x instanceof Pit);
         if (pit) {
             this.player.die();
         }
@@ -85,6 +91,18 @@ class Game {
         if (!this.player.isAlive) {
             const result = confirm("Ты проиграл! Попробовать ещё раз?");
             console.log(result);
+        }
+
+        const isWumpusSleep = Math.round(Math.random());
+
+        if (!isWumpusSleep) {
+            let room = this.map.rooms[this.wumpus.y][this.wumpus.x];
+            room.remove(this.wumpus);
+
+            this.wumpus.move(Direction.random);
+
+            room = this.map.rooms[this.wumpus.y][this.wumpus.x];
+            room.add(this.wumpus);
         }
 
         this.#clean();

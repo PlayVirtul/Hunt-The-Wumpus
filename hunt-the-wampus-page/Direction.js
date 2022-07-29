@@ -1,6 +1,10 @@
 export default class Direction {
-    static get up() { return 'up'; };
-    static get down() { return 'down'; };
-    static get right() { return 'right'; };
-    static get left() { return 'left'; };
+    static get up() { return 0; };
+    static get down() { return 1; };
+    static get right() { return 2; };
+    static get left() { return 3; };
+
+    static get random() {
+        return Math.floor(Math.random() * 4);
+    }
 }
