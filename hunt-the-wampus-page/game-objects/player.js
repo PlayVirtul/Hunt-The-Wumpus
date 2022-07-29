@@ -4,15 +4,19 @@ import GameObject from "./game-object.js";
 
 export default class Player extends GameObject {
     constructor(x, y) {
-        if (!x || x < 0) {
-            throw new Error('player\'s x cannot be less than zero');
-        }
-
-        if (!y || y < 0) {
-            throw new Error('player\'s y cannot be less than zero')
-        }
-
         super(x, y);
+
+        this.#isAlive = true;
+    }
+
+    #isAlive = false;
+
+    get isAlive() {
+        return this.#isAlive;
+    }
+
+    die() {
+        this.#isAlive = false;
     }
 
     move(direction) {

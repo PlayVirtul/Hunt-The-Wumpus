@@ -2,8 +2,9 @@ import Direction from "./direction.js";
 import GameMap from "./game-objects/game-map.js";
 import Player from "./game-objects/player.js";
 import Pit from "./game-objects/pit.js";
+import Wumpus from "./game-objects/wumpus.js";
 
-class Application {
+class Game {
     run() {
         const size = 5;
         this.player = new Player(3, 2);
@@ -11,7 +12,8 @@ class Application {
 
         gameObjects.push(this.player);
         gameObjects.push(new Pit(0, 3));
-        gameObjects.push(new Pit(4, 2));
+        gameObjects.push(new Pit(4, 1));
+        gameObjects.push(new Wumpus(1, 1));
 
         this.map = new GameMap(gameObjects, size);
         this.#draw();
@@ -55,14 +57,35 @@ class Application {
         room = this.map.rooms[this.player.y][this.player.x];
         room.add(this.player);
 
-        this.#clean();
-        this.#draw();
+        const pit = room.getObject(x => x instanceof Pit);
+
+        if (pit) {
+            this.player.die();
+        }
+
+        this.#update();
     }
 
     attack(direction) {
         const arrow = this.player.attack(direction);
         const room = this.map.rooms[arrow.y][arrow.x];
         room.add(arrow);
+
+        this.#update();
+    }
+
+    #update() {
+        const room = this.map.rooms[this.player.y][this.player.x];
+        const pit = room.getObject(x => x instanceof Pit);
+
+        if (pit) {
+            this.player.die();
+        }
+
+        if (!this.player.isAlive) {
+            const result = confirm("Ты проиграл! Попробовать ещё раз?");
+            console.log(result);
+        }
 
         this.#clean();
         this.#draw();
@@ -131,5 +154,5 @@ class Application {
 
 }
 
-const app = new Application();
+const app = new Game();
 app.run();

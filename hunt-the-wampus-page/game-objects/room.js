@@ -31,6 +31,14 @@ export default class Room {
         this.#gameObjects.splice(index, 1);
     }
 
+    getObjects() {
+        return new Array(...this.#gameObjects);
+    }
+
+    getObject(predicat) {
+        return this.#gameObjects.find(predicat);
+    }
+
     render() {
         const roomElement = document.createElement('div');
         roomElement.classList.add('room');
