@@ -27,43 +27,7 @@ class Game {
     }
 
     move(direction) {
-        let movable = false;
-        switch (direction) {
-            case Direction.up:
-                movable = this.player.y > 0;
-                break;
-
-            case Direction.down:
-                movable = this.player.y < (this.map.size - 1);
-                break;
-
-            case Direction.left:
-                movable = this.player.x > 0;
-                break;
-
-            case Direction.right:
-                movable = this.player.x < (this.map.size - 1);
-                break;
-        }
-
-        if (!movable) {
-            return;
-        }
-
-        let room = this.map.rooms[this.player.y][this.player.x];
-        room.remove(this.player);
-
-        this.player.move(direction);
-
-        room = this.map.rooms[this.player.y][this.player.x];
-        room.add(this.player);
-
-        const pit = room.getObject(x => x instanceof Pit);
-
-        if (pit) {
-            this.player.die();
-        }
-
+        this.#moveGameObject(this.player, direction);
         this.#update();
     }
 
@@ -73,6 +37,45 @@ class Game {
         room.add(arrow);
 
         this.#update();
+    }
+
+    #moveGameObject(gameObject, direction) {
+        let movable = false;
+        switch (direction) {
+            case Direction.up:
+                movable = gameObject.y > 0;
+                break;
+
+            case Direction.down:
+                movable = gameObject.y < (this.map.size - 1);
+                break;
+
+            case Direction.left:
+                movable = gameObject.x > 0;
+                break;
+
+            case Direction.right:
+                movable = gameObject.x < (this.map.size - 1);
+                break;
+        }
+
+        if (!movable) {
+            return;
+        }
+
+        let room = this.map.rooms[gameObject.y][gameObject.x];
+        room.remove(gameObject);
+
+        gameObject.move(direction);
+
+        room = this.map.rooms[gameObject.y][gameObject.x];
+        room.add(gameObject);
+
+        const pit = room.getObject(x => x instanceof Pit);
+
+        if (pit) {
+            gameObject.die();
+        }
     }
 
     #update() {
@@ -96,13 +99,7 @@ class Game {
         const isWumpusSleep = Math.round(Math.random());
 
         if (!isWumpusSleep) {
-            let room = this.map.rooms[this.wumpus.y][this.wumpus.x];
-            room.remove(this.wumpus);
-
-            this.wumpus.move(Direction.random);
-
-            room = this.map.rooms[this.wumpus.y][this.wumpus.x];
-            room.add(this.wumpus);
+            this.#moveGameObject(this.wumpus, Direction.random);
         }
 
         this.#clean();
