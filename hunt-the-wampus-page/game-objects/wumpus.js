@@ -1,7 +1,7 @@
-import GameObject from "./game-object.js";
+import MoveableObject from "./moveable-object.js";
 import Direction from "../direction.js";
 
-export default class Wumpus extends GameObject {
+export default class Wumpus extends MoveableObject {
     constructor(x, y) {
         super(x, y);
 
@@ -16,26 +16,6 @@ export default class Wumpus extends GameObject {
 
     die() {
         this.#isAlive = false;
-    }
-
-    move(direction) {
-        switch (direction) {
-            case Direction.up:
-                this.y--;
-                break;
-
-            case Direction.down:
-                this.y++;
-                break;
-
-            case Direction.left:
-                this.x--;
-                break;
-
-            case Direction.right:
-                this.x++;
-                break;
-        }
     }
 
     attack(direction) {
