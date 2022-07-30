@@ -38,6 +38,10 @@ class Game {
     }
 
     attack(direction) {
+        if (!direction) {
+            throw new Error('direction cannot bbe null or undefined');
+        }
+
         const arrow = this.player.attack(direction);
         const room = this.map.rooms[arrow.y][arrow.x];
         room.add(arrow);
@@ -51,26 +55,7 @@ class Game {
             throw new Error('only MoveableObject can be moved by Game.moveableObject');
         }
 
-        let canMove = false;
-        switch (direction) {
-            case Direction.up:
-                canMove = moveableObject.y > 0;
-                break;
-
-            case Direction.down:
-                canMove = moveableObject.y < (this.map.size - 1);
-                break;
-
-            case Direction.left:
-                canMove = moveableObject.x > 0;
-                break;
-
-            case Direction.right:
-                canMove = moveableObject.x < (this.map.size - 1);
-                break;
-        }
-
-        if (!canMove) {
+        if (!this.map.isValidDirection(moveableObject, direction)) {
             return;
         }
 
@@ -81,12 +66,6 @@ class Game {
 
         room = this.map.rooms[moveableObject.y][moveableObject.x];
         room.add(moveableObject);
-
-        const pit = room.getObject(x => x instanceof Pit);
-
-        if (pit) {
-            moveableObject.die();
-        }
     }
 
     #update() {
@@ -96,9 +75,7 @@ class Game {
         const pit = room.getObject(x => x instanceof Pit);
         const bats = room.getObject(x => x instanceof Bats);
 
-        if (wumpus) {
-            this.player.die();
-        } else if (pit) {
+        if (wumpus || pit) {
             this.player.die();
         } else if (bats) {
             const x = Math.floor(Math.random() * this.map.size);
